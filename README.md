@@ -17,5 +17,5 @@ Features
 
 Join Us
 
-Transform your body, transform your life.
+Transform your body, transform your life.... 
 
