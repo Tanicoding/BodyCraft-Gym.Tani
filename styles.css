@@ -592,6 +592,7 @@ nav {
 .form__message{
   color: var(--white);
   margin-top: 1rem;
+  margin-left: 30%;
 }
 .btn1{
   margin-left: 42%;
