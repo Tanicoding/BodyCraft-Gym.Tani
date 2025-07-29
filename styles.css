@@ -175,6 +175,7 @@ nav {
 }
 
 .header__content p {
+  text-align: justify;
   margin-bottom: 2rem;
   color: var(--text-light);
 }
@@ -317,6 +318,7 @@ nav {
 }
 
 .class__content p {
+  text-align: justify;
   margin-bottom: 4rem;
   color: var(--text-light);
 }
