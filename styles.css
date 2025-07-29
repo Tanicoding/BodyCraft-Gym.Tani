@@ -574,6 +574,43 @@ nav {
   color: var(--white);
 }
 
+contact-us
+/* contact us page */
+.contact-section {
+      max-width: 800px;
+      margin: auto;
+    }
+.contact_form input,
+.contact_form textarea{
+  display: block;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  margin-left: 43%;
+}
+.form__message{
+  color: var(--white);
+  margin-top: 1rem;
+  margin-left: 39%;
+}
+.btn1{
+  margin-left: 46%;
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--white);
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  
+}
+/* contact section ends */
+
 /* Diet Plan Section Styles */
 .diet__container {
   background-color: var(--primary-color-light);
@@ -645,6 +682,7 @@ nav {
     padding: 1rem;
   }
 }
+
 
 @media (width < 900px) {
   .nav__links {
