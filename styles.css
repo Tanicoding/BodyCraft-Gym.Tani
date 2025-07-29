@@ -588,15 +588,15 @@ contact-us
   border-radius: 10px;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
-  margin-left: 37%;
+  margin-left: 43%;
 }
 .form__message{
   color: var(--white);
   margin-top: 1rem;
-  margin-left: 30%;
+  margin-left: 37%;
 }
 .btn1{
-  margin-left: 42%;
+  margin-left: 46%;
   margin-top: 1.5rem;
   padding: 1rem 2rem;
   outline: none;
