@@ -608,6 +608,7 @@ nav {
   transition: 0.3s;
   
 }
+/* contact section ends */
 
 @media (width < 900px) {
   .nav__links {
