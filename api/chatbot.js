@@ -1,6 +1,16 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+const staticLinks = [
+  { label: "Contact Us", href: "contact.html", keywords: ["contact", "reach", "phone", "call"] },
+  { label: "Our Programs", href: "#programs", keywords: ["program", "activities", "services"] },
+  { label: "Classes", href: "#classes", keywords: ["class", "session", "training"] },
+  { label: "Pricing Plans", href: "#pricing", keywords: ["price", "pricing", "cost", "plan"] },
+  { label: "AI Diet Plan", href: "#diet-plan", keywords: ["diet", "meal", "nutrition", "food"] }
+];
+
+
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Only POST requests allowed' });
@@ -40,7 +50,20 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "No response from model" });
     }
 
-    res.status(200).json({ reply: result.choices[0].message.content });
+    const userMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
+    const filteredLinks = staticLinks.filter(link =>
+        link.keywords.some(keyword => userMessage.includes(keyword))
+        );
+
+
+    const excludedKeywords = ["feature", "features", "what do you do", "functionalities"];
+    const shouldSendButtons = !excludedKeywords.some(keyword => userMessage.includes(keyword));
+
+    res.status(200).json({
+  reply: result.choices[0].message.content,
+  ...(filteredLinks.length > 0 ? { buttons: filteredLinks } : {})
+});
+
 
   } catch (err) {
     console.error("Handler error:", err);

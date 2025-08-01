@@ -6,6 +6,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendChatBtn = document.querySelector("#send-btn");
   const chatForm = document.getElementById("chat-form");
 
+    const staticLinks = [
+    {
+      label: "Contact Us",
+      href: "contact.html",
+      keywords: ["contact", "reach", "phone", "call"]
+    },
+    {
+      label: "Our Programs",
+      href: "programs.html",
+      keywords: ["program", "activities", "services"]
+    },
+    {
+      label: "Classes",
+      href: "classes.html",
+      keywords: ["class", "session", "training"]
+    },
+    {
+      label: "Pricing Plans",
+      href: "pricing.html",
+      keywords: ["price", "pricing", "cost", "plan"]
+    },
+    {
+      label: "AI Diet Plan",
+      href: "diet-plan.html",
+      keywords: ["diet", "meal", "nutrition", "food"]
+    }
+  ];
+
+
   chatInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();  // Prevent adding a newline
@@ -162,7 +191,35 @@ const tabMap = {
       const linkedReply = parseMarkdownLinks(formattedReply);
 
       chatHistory.push({ role: "assistant", content: botReply });
-      chatbox.lastChild.querySelector("p").innerHTML = linkedReply;
+      chatbox.lastChild.querySelector("p").innerHTML = parseMarkdownLinks(parseMarkdownBold(botReply));
+
+
+      const lowerUser = userMessage.toLowerCase();
+const lowerBotReply = botReply.toLowerCase();
+
+// Find links whose keywords match user message or bot reply
+const matchedLinks = staticLinks.filter(link => 
+  link.keywords.some(keyword => 
+    lowerUser.includes(keyword) || lowerBotReply.includes(keyword)
+  )
+);
+
+// Create container for links if matched
+if (matchedLinks.length > 0) {
+  const linksContainer = document.createElement('div');
+  linksContainer.className = 'static-link-container';
+
+  matchedLinks.forEach(link => {
+    const a = document.createElement('a');
+    a.href = link.href;
+    a.textContent = link.label;
+    a.className = 'chatbot-link';
+    linksContainer.appendChild(a);
+  });
+
+  chatbox.lastChild.querySelector('.bot-message-content').appendChild(linksContainer);
+}
+
 
 
       chatbox.scrollTop = chatbox.scrollHeight;
@@ -187,15 +244,6 @@ const showStaticLinks = lowerUserMessage.includes("about") ||
                         showAllButtons;
 
 if (showStaticLinks) {
-const staticLinks = [
-  { label: "📞 Contact Us", href: "contact.html" },
-  { label: "💡 Our Programs", href: "#programs" },
-  { label: "🏋️ Classes", href: "#classes" },
-  { label: "💰 Pricing Plans", href: "#pricing" },
-  { label: "🧠 AI Diet Plan", href: "#diet-plan" }
-];
-
-
   const linksContainer = document.createElement('div');
   linksContainer.className = 'static-link-container';
 
