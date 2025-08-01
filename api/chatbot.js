@@ -12,23 +12,7 @@ export default async function handler(req, res) {
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'Messages array is required' });
     }
-    // 🛡️ Check for forbidden keywords to avoid leaking internal info
-const forbiddenKeywords = [
-  "source code", "implementation", "how are you built", "public folder",
-  "static", "js file", "html file", ".env", ".js", ".ts", ".html", ".css",
-  "api key", "file path", "backend", "internal logic", "folder structure"
-];
-
-const lastMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
-
-const isSensitive = forbiddenKeywords.some(word => lastMessage.includes(word));
-
-if (isSensitive) {
-  return res.status(200).json({
-    reply: "I'm your fitness assistant, not a developer bot. Let’s keep it workout-focused! 💪"
-  });
-}
-
+    
 
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
