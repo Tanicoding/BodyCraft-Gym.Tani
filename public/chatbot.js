@@ -6,36 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendChatBtn = document.querySelector("#send-btn");
   const chatForm = document.getElementById("chat-form");
 
-    const staticLinks = [
-    {
-      label: "Contact Us",
-      href: "contact.html",
-      keywords: ["contact", "reach", "phone", "call"]
-    },
-    {
-      label: "Our Programs",
-      href: "programs.html",
-      keywords: ["program", "activities", "services"]
-    },
-    {
-      label: "Classes",
-      href: "classes.html",
-      keywords: ["class", "session", "training"]
-    },
-    {
-      label: "Pricing Plans",
-      href: "pricing.html",
-      keywords: ["price", "pricing", "cost", "plan"]
-    },
-    {
-      label: "AI Diet Plan",
-      href: "diet-plan.html",
-      keywords: ["diet", "meal", "nutrition", "food"]
-    }
-  ];
-
-
-
   chatInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();  // Prevent adding a newline
@@ -186,42 +156,13 @@ const tabMap = {
       function parseMarkdownLinks(text) {
         return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
       }
-        function parseMarkdownSingleBold(text) {
-            return text.replace(/\*(.*?)\*/g, '<b>$1</b>');
-        }
 
       const botReply = data.reply || "Sorry, no reply.";
-      const formattedReply = parseMarkdownLinks(parseMarkdownSingleBold(parseMarkdownBold(botReply)));
+      const formattedReply = parseMarkdownBold(botReply);
+      const linkedReply = parseMarkdownLinks(formattedReply);
+
       chatHistory.push({ role: "assistant", content: botReply });
-      chatbox.lastChild.querySelector("p").innerHTML = formattedReply;
-
-
-      const lowerUser = userMessage.toLowerCase();
-const lowerBotReply = botReply.toLowerCase();
-
-// Find links whose keywords match user message or bot reply
-const matchedLinks = staticLinks.filter(link => 
-  link.keywords.some(keyword => 
-    lowerUser.includes(keyword) || lowerBotReply.includes(keyword)
-  )
-);
-
-// Create container for links if matched
-if (matchedLinks.length > 0) {
-  const linksContainer = document.createElement('div');
-  linksContainer.className = 'static-link-container';
-
-  matchedLinks.forEach(link => {
-    const a = document.createElement('a');
-    a.href = link.href;
-    a.textContent = link.label;
-    a.className = 'chatbot-link';
-    linksContainer.appendChild(a);
-  });
-
-  chatbox.lastChild.querySelector('.bot-message-content').appendChild(linksContainer);
-}
-
+      chatbox.lastChild.querySelector("p").innerHTML = linkedReply;
 
 
       chatbox.scrollTop = chatbox.scrollHeight;
@@ -239,45 +180,38 @@ const showAllButtons = lowerUserMessage.includes("list of functionalities")
 const exploreIntent = lowerUserMessage.includes("explore new") || lowerUserMessage.includes("explore feature");
 
 
-// const showStaticLinks = lowerUserMessage.includes("about") ||
-//                         lowerUserMessage.includes("contact") ||
-//                         lowerUserMessage.includes("cart") ||
-//                         lowerUserMessage.includes("blog") ||
-//                         showAllButtons;
+const showStaticLinks = lowerUserMessage.includes("about") ||
+                        lowerUserMessage.includes("contact") ||
+                        lowerUserMessage.includes("cart") ||
+                        lowerUserMessage.includes("blog") ||
+                        showAllButtons;
 
-// if (showStaticLinks) {
-//   const linksContainer = document.createElement('div');
-//   linksContainer.className = 'static-link-container';
-
-//   staticLinks.forEach(link => {
-//     const a = document.createElement('a');
-//     a.href = link.href;
-//     a.textContent = link.label;
-//     a.className = 'chatbot-link';
-//     linksContainer.appendChild(a);
-//   });
-
-//   chatbox.lastChild.querySelector('.bot-message-content').appendChild(linksContainer);
-// }
+if (showStaticLinks) {
+const staticLinks = [
+  { label: "📞 Contact Us", href: "contact.html" },
+  { label: "💡 Our Programs", href: "#programs" },
+  { label: "🏋️ Classes", href: "#classes" },
+  { label: "💰 Pricing Plans", href: "#pricing" },
+  { label: "🧠 AI Diet Plan", href: "#diet-plan" }
+];
 
 
-const keywordButtonMap = {
-  "program": ["programs"],
-  "class": ["classes"],
-  "trainer": ["classes"],
-  "pricing": ["pricing"],
-  "diet": ["diet plan"],
-  "nutrition": ["diet plan"],
-  "contact": ["contact"],
-  "join": ["join us"],
-  "testimonial": ["policy"], // optional - adjust if needed
-  "features": Object.keys(tabMap),       // all buttons for features questions
-  "functionalities": Object.keys(tabMap),
-  "what can you do": Object.keys(tabMap),
-};
+  const linksContainer = document.createElement('div');
+  linksContainer.className = 'static-link-container';
+
+  staticLinks.forEach(link => {
+    const a = document.createElement('a');
+    a.href = link.href;
+    a.textContent = link.label;
+    a.className = 'chatbot-link';
+    linksContainer.appendChild(a);
+  });
+
+  chatbox.lastChild.querySelector('.bot-message-content').appendChild(linksContainer);
+}
+
 
 if (showAllButtons) {
-  // Show all buttons
   for (const [keyword, tabId] of Object.entries(tabMap)) {
     const btn = document.createElement('button');
     btn.textContent = `Go to ${keyword.charAt(0).toUpperCase() + keyword.slice(1)}`;
@@ -291,32 +225,22 @@ if (showAllButtons) {
   }
 } else {
   const lowerReply = botReply.toLowerCase();
-  const lowerUser = userMessage.toLowerCase();
+  const fitnessKeywords = ["program", "class", "trainer", "pricing", "diet", "fitness", "nutrition", "plan", "strength", "fat loss", "gain", "schedule"];
 
-  const buttonsToShow = new Set();
-
-  // Check both user message and bot reply for keywords
-  Object.entries(keywordButtonMap).forEach(([key, btns]) => {
-    if (lowerUser.includes(key) || lowerReply.includes(key)) {
-      btns.forEach(b => buttonsToShow.add(b));
-    }
-  });
-
-  buttonsToShow.forEach(bKey => {
-    if (tabMap[bKey]) {
+  if (fitnessKeywords.some(word => lowerReply.includes(word))) {
+    for (const [keyword, tabId] of Object.entries(tabMap)) {
       const btn = document.createElement('button');
-      btn.textContent = `Go to ${bKey.charAt(0).toUpperCase() + bKey.slice(1)}`;
+      btn.textContent = `Go to ${keyword.charAt(0).toUpperCase() + keyword.slice(1)}`;
       btn.className = 'preview-button';
       btn.type = "button";
       btn.addEventListener('click', () => {
-        switchTab(tabMap[bKey]);
+        switchTab(tabId);
         document.body.classList.remove('show-chatbot');
       });
       previewContainer.appendChild(btn);
     }
-  });
+  }
 }
-
 
 
       // Append buttons if any were created

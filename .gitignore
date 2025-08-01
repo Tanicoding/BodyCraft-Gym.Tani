@@ -26,3 +26,4 @@ build/
 # Optional: lock files if you don’t want to commit
 package-lock.json
 yarn.lock
+.vercel
