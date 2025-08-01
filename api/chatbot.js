@@ -50,14 +50,19 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "No response from model" });
     }
 
-    const userMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
-    const filteredLinks = staticLinks.filter(link =>
-        link.keywords.some(keyword => userMessage.includes(keyword))
-        );
+        const userMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
 
+    const greetings = ["hi", "hello", "hey", "good morning", "good afternoon"];
+    const isGreeting = greetings.some(greet => userMessage === greet);
+
+    const filteredLinks = staticLinks.filter(link =>
+      link.keywords.some(keyword => userMessage.includes(keyword))
+    );
 
     const excludedKeywords = ["feature", "features", "what do you do", "functionalities"];
-    const shouldSendButtons = !excludedKeywords.some(keyword => userMessage.includes(keyword));
+    const hasExcludedKeywords = excludedKeywords.some(keyword => userMessage.includes(keyword));
+
+    const shouldSendButtons = !isGreeting && !hasExcludedKeywords && filteredLinks.length > 0;
 
     res.status(200).json({
   reply: result.choices[0].message.content,
