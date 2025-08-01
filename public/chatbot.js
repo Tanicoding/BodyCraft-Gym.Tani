@@ -211,7 +211,23 @@ const staticLinks = [
 }
 
 
+const keywordButtonMap = {
+  "program": ["programs"],
+  "class": ["classes"],
+  "trainer": ["classes"],
+  "pricing": ["pricing"],
+  "diet": ["diet plan"],
+  "nutrition": ["diet plan"],
+  "contact": ["contact"],
+  "join": ["join us"],
+  "testimonial": ["policy"], // optional - adjust if needed
+  "features": Object.keys(tabMap),       // all buttons for features questions
+  "functionalities": Object.keys(tabMap),
+  "what can you do": Object.keys(tabMap),
+};
+
 if (showAllButtons) {
+  // Show all buttons
   for (const [keyword, tabId] of Object.entries(tabMap)) {
     const btn = document.createElement('button');
     btn.textContent = `Go to ${keyword.charAt(0).toUpperCase() + keyword.slice(1)}`;
@@ -225,22 +241,32 @@ if (showAllButtons) {
   }
 } else {
   const lowerReply = botReply.toLowerCase();
-  const fitnessKeywords = ["program", "class", "trainer", "pricing", "diet", "fitness", "nutrition", "plan", "strength", "fat loss", "gain", "schedule"];
+  const lowerUser = userMessage.toLowerCase();
 
-  if (fitnessKeywords.some(word => lowerReply.includes(word))) {
-    for (const [keyword, tabId] of Object.entries(tabMap)) {
+  const buttonsToShow = new Set();
+
+  // Check both user message and bot reply for keywords
+  Object.entries(keywordButtonMap).forEach(([key, btns]) => {
+    if (lowerUser.includes(key) || lowerReply.includes(key)) {
+      btns.forEach(b => buttonsToShow.add(b));
+    }
+  });
+
+  buttonsToShow.forEach(bKey => {
+    if (tabMap[bKey]) {
       const btn = document.createElement('button');
-      btn.textContent = `Go to ${keyword.charAt(0).toUpperCase() + keyword.slice(1)}`;
+      btn.textContent = `Go to ${bKey.charAt(0).toUpperCase() + bKey.slice(1)}`;
       btn.className = 'preview-button';
       btn.type = "button";
       btn.addEventListener('click', () => {
-        switchTab(tabId);
+        switchTab(tabMap[bKey]);
         document.body.classList.remove('show-chatbot');
       });
       previewContainer.appendChild(btn);
     }
-  }
+  });
 }
+
 
 
       // Append buttons if any were created
