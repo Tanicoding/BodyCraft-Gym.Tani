@@ -83,14 +83,15 @@ Additional Notes:
 
 
 const tabMap = {
-  "programs": "#programs",         // ID of section in your HTML
-  "classes": "#classes",
-  "pricing": "#pricing",
-  "testimonials": "#testimonials",
-  "join us": "#join",
-  "ai diet plan": "#diet-plan",
-  "contact": "contact.html"
+  "programs": "programs.html",
+  "classes": "classes.html",
+  "pricing": "Pricing Plan.html",
+  "join us": "join.html",
+  "diet plan": "diet-plan.html",
+  "contact": "contact.html",
+  "policy": "privacy-policy.html"
 };
+
 
 
   chatForm.addEventListener("submit", e => {
