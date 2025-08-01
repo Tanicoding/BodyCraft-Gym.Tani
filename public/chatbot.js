@@ -150,36 +150,24 @@ const tabMap = {
 
 
       const data = await response.json();
-    function escapeHtml(text) {
-    return text.replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
-    }
+      function parseMarkdownBold(text) {
+        return text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+      }
+      function parseMarkdownLinks(text) {
+        return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      }
+      function parseMarkdownSingleBold(text) {
+        return text.replace(/\*(.*?)\*/g, '<b>$1</b>');
+        }
 
-    function parseMarkdown(text) {
-    // First escape to avoid HTML injection
-    let escaped = escapeHtml(text);
-
-    // Parse bold (**bold**)
-    escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-
-    // Parse italic (*italic*)
-    escaped = escaped.replace(/\*(.*?)\*/g, '<i>$1</i>');
-
-    // Links if needed
-    escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-
-    return escaped;
-    }
       const botReply = data.reply || "Sorry, no reply.";
        // Remove any markdown tables
     botReply = botReply.replace(/^\|(.+)\|[\r\n]+(\|[- :]+)+[\r\n]+((\|.*\|[\r\n]+)+)/gm, '').trim();
 
     // Also remove any HTML table tags if the API returns HTML tables
     botReply = botReply.replace(/<table[\s\S]*?<\/table>/gi, '').trim();
-      const formattedReply = parseMarkdown(botReply);
-      chatbox.lastChild.querySelector("p").innerHTML = formattedReply;
-
+      const formattedReply = parseMarkdownBold(botReply);
+      const linkedReply = parseMarkdownSingleBold(formattedReply);
 
       chatHistory.push({ role: "assistant", content: botReply });
       chatbox.lastChild.querySelector("p").innerHTML = linkedReply;
