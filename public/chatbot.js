@@ -161,13 +161,9 @@ const tabMap = {
         }
 
       const botReply = data.reply || "Sorry, no reply.";
-       // Remove any markdown tables
-    botReply = botReply.replace(/^\|(.+)\|[\r\n]+(\|[- :]+)+[\r\n]+((\|.*\|[\r\n]+)+)/gm, '').trim();
-
-    // Also remove any HTML table tags if the API returns HTML tables
-    botReply = botReply.replace(/<table[\s\S]*?<\/table>/gi, '').trim();
+      
       const formattedReply = parseMarkdownBold(botReply);
-      const linkedReply = parseMarkdownSingleBold(formattedReply);
+      const linkedReply = parseMarkdownLinks(formattedReply);
 
       chatHistory.push({ role: "assistant", content: botReply });
       chatbox.lastChild.querySelector("p").innerHTML = linkedReply;
