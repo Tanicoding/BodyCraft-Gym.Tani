@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
 
+
   chatInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();  // Prevent adding a newline
@@ -185,13 +186,14 @@ const tabMap = {
       function parseMarkdownLinks(text) {
         return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
       }
+        function parseMarkdownSingleBold(text) {
+            return text.replace(/\*(.*?)\*/g, '<b>$1</b>');
+        }
 
       const botReply = data.reply || "Sorry, no reply.";
-      const formattedReply = parseMarkdownBold(botReply);
-      const linkedReply = parseMarkdownLinks(formattedReply);
-
+      const formattedReply = parseMarkdownLinks(parseMarkdownSingleBold(parseMarkdownBold(botReply)));
       chatHistory.push({ role: "assistant", content: botReply });
-      chatbox.lastChild.querySelector("p").innerHTML = parseMarkdownLinks(parseMarkdownBold(botReply));
+      chatbox.lastChild.querySelector("p").innerHTML = formattedReply;
 
 
       const lowerUser = userMessage.toLowerCase();
@@ -237,26 +239,26 @@ const showAllButtons = lowerUserMessage.includes("list of functionalities")
 const exploreIntent = lowerUserMessage.includes("explore new") || lowerUserMessage.includes("explore feature");
 
 
-const showStaticLinks = lowerUserMessage.includes("about") ||
-                        lowerUserMessage.includes("contact") ||
-                        lowerUserMessage.includes("cart") ||
-                        lowerUserMessage.includes("blog") ||
-                        showAllButtons;
+// const showStaticLinks = lowerUserMessage.includes("about") ||
+//                         lowerUserMessage.includes("contact") ||
+//                         lowerUserMessage.includes("cart") ||
+//                         lowerUserMessage.includes("blog") ||
+//                         showAllButtons;
 
-if (showStaticLinks) {
-  const linksContainer = document.createElement('div');
-  linksContainer.className = 'static-link-container';
+// if (showStaticLinks) {
+//   const linksContainer = document.createElement('div');
+//   linksContainer.className = 'static-link-container';
 
-  staticLinks.forEach(link => {
-    const a = document.createElement('a');
-    a.href = link.href;
-    a.textContent = link.label;
-    a.className = 'chatbot-link';
-    linksContainer.appendChild(a);
-  });
+//   staticLinks.forEach(link => {
+//     const a = document.createElement('a');
+//     a.href = link.href;
+//     a.textContent = link.label;
+//     a.className = 'chatbot-link';
+//     linksContainer.appendChild(a);
+//   });
 
-  chatbox.lastChild.querySelector('.bot-message-content').appendChild(linksContainer);
-}
+//   chatbox.lastChild.querySelector('.bot-message-content').appendChild(linksContainer);
+// }
 
 
 const keywordButtonMap = {
