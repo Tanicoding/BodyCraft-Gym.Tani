@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - BodyCraft Gym</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .edit-profile-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #111317 0%, #1f2125 100%);
+            padding: 2rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-profile-card {
+            background: rgba(31, 33, 37, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(71, 215, 95, 0.2);
+        }
+
+        .edit-profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .edit-profile-header h1 {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .edit-profile-header p {
+            color: #d1d5db;
+            font-size: 1.1rem;
+        }
+
+        .profile-avatar-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #47d75f, #3ca34d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-avatar i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #47d75f;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .avatar-upload:hover {
+            background: #3ca34d;
+        }
+
+        .avatar-upload i {
+            font-size: 1rem;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #35373b;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #1f2125;
+            color: #ffffff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #47d75f;
+            box-shadow: 0 0 0 3px rgba(71, 215, 95, 0.1);
+            background: #2a2d32;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #6b7280;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #47d75f, #3ca34d);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(71, 215, 95, 0.3);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: #35373b;
+            color: #d1d5db;
+            border: 2px solid #35373b;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #2a2d32;
+            border-color: #47d75f;
+            color: #ffffff;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(31, 33, 37, 0.9);
+            border: 1px solid rgba(71, 215, 95, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(71, 215, 95, 0.2);
+            border-color: #47d75f;
+        }
+
+        .back-btn i {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .edit-profile-container {
+                padding: 1rem;
+            }
+
+            .edit-profile-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .edit-profile-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+            }
+        }
+
+        .success-message {
+            background: rgba(71, 215, 95, 0.1);
+            color: #47d75f;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid rgba(71, 215, 95, 0.3);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Custom select styling for dark theme */
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        .form-group select option {
+            background: #1f2125;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-profile-container">
+        <button class="back-btn" onclick="goBack()">
+            <i class="ri-arrow-left-line"></i>
+        </button>
+
+        <div class="edit-profile-card">
+            <div class="edit-profile-header">
+                <h1>Edit Profile</h1>
+                <p>Update your personal information and fitness goals</p>
+            </div>
+
+            <div id="successMessage" class="success-message">
+                Profile updated successfully!
+            </div>
+
+            <div id="errorMessage" class="error-message">
+                Please fill in all required fields.
+            </div>
+
+            <form id="editProfileForm">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar" onclick="document.getElementById('avatarInput').click()">
+                        <i class="ri-user-fill"></i>
+                        <div class="avatar-upload">
+                            <i class="ri-camera-line"></i>
+                        </div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                    <p style="color: #d1d5db;">Click to upload profile picture</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <input type="number" id="age" name="age" min="16" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weight">Weight (kg) *</label>
+                        <input type="number" id="weight" name="weight" step="0.1" min="30" max="300" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm) *</label>
+                        <input type="number" id="height" name="height" min="100" max="250" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fitnessGoal">Fitness Goal *</label>
+                    <select id="fitnessGoal" name="fitnessGoal" required>
+                        <option value="">Select Your Goal</option>
+                        <option value="weight-loss">Weight Loss</option>
+                        <option value="muscle-gain">Muscle Gain</option>
+                        <option value="strength">Strength Training</option>
+                        <option value="endurance">Endurance</option>
+                        <option value="flexibility">Flexibility</option>
+                        <option value="general-fitness">General Fitness</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="membershipPlan">Membership Plan</label>
+                    <select id="membershipPlan" name="membershipPlan">
+                        <option value="">Select Plan</option>
+                        <option value="basic">Basic Plan</option>
+                        <option value="premium">Premium Plan</option>
+                        <option value="vip">VIP Plan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="medicalConditions">Medical Conditions (Optional)</label>
+                    <textarea id="medicalConditions" name="medicalConditions" placeholder="Please mention any medical conditions or injuries that might affect your training..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="emergencyContact">Emergency Contact</label>
+                    <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Name and phone number">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="goBack()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Load existing user data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+        });
+
+        function loadUserData() {
+            // Load data from localStorage or use default values
+            const userData = JSON.parse(localStorage.getItem('userData')) || {
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john.doe@example.com',
+                phone: '+1 234 567 8900',
+                age: 25,
+                gender: 'male',
+                weight: 75,
+                height: 175,
+                fitnessGoal: 'weight-loss',
+                membershipPlan: 'premium',
+                medicalConditions: '',
+                emergencyContact: 'Jane Doe - +1 234 567 8901'
+            };
+
+            // Populate form fields
+            document.getElementById('firstName').value = userData.firstName;
+            document.getElementById('lastName').value = userData.lastName;
+            document.getElementById('email').value = userData.email;
+            document.getElementById('phone').value = userData.phone;
+            document.getElementById('age').value = userData.age;
+            document.getElementById('gender').value = userData.gender;
+            document.getElementById('weight').value = userData.weight;
+            document.getElementById('height').value = userData.height;
+            document.getElementById('fitnessGoal').value = userData.fitnessGoal;
+            document.getElementById('membershipPlan').value = userData.membershipPlan;
+            document.getElementById('medicalConditions').value = userData.medicalConditions;
+            document.getElementById('emergencyContact').value = userData.emergencyContact;
+        }
+
+        // Handle form submission
+        document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate required fields
+            const requiredFields = ['firstName', 'lastName', 'email', 'age', 'weight', 'height', 'fitnessGoal'];
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    element.style.borderColor = '#ef4444';
+                    isValid = false;
+                } else {
+                    element.style.borderColor = '#35373b';
+                }
+            });
+
+            if (!isValid) {
+                showMessage('error', 'Please fill in all required fields.');
+                return;
+            }
+
+            // Collect form data
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                age: parseInt(document.getElementById('age').value),
+                gender: document.getElementById('gender').value,
+                weight: parseFloat(document.getElementById('weight').value),
+                height: parseInt(document.getElementById('height').value),
+                fitnessGoal: document.getElementById('fitnessGoal').value,
+                membershipPlan: document.getElementById('membershipPlan').value,
+                medicalConditions: document.getElementById('medicalConditions').value,
+                emergencyContact: document.getElementById('emergencyContact').value,
+                lastUpdated: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            localStorage.setItem('userData', JSON.stringify(formData));
+
+            // Show success message
+            showMessage('success', 'Profile updated successfully!');
+
+            // Redirect back to main page after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        });
+
+        function showMessage(type, message) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+
+            if (type === 'success') {
+                successMsg.textContent = message;
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+            } else {
+                errorMsg.textContent = message;
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+            }
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Handle avatar upload
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatar = document.querySelector('.profile-avatar');
+                    avatar.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                    <div class="avatar-upload">
+                        <i class="ri-camera-line"></i>
+                    </div>`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html> 

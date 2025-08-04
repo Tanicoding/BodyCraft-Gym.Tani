@@ -8,16 +8,92 @@
     <title>Privacy Policy - BODY CRAFT GYM</title>
 </head>
 <body>
-    <nav>
+    <nav class="navbar">
+        <!-- Hamburger Toggle -->
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+        <label for="nav-toggle" class="nav-toggle-label">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+
+        <!-- Nav Links -->
         <ul class="nav__links">
             <li class="link"><a href="index.html">Home</a></li>
-            <li class="link"><a href="index.html#program">Program</a></li>
-            <li class="link"><a href="index.html#service">Service</a></li>
+            <li class="link"><a href="index.html#programs">Program</a></li>
+            <li class="link"><a href="index.html#classes">Service</a></li>
             <li class="link"><a href="index.html#diet-plan">Diet Plan</a></li>
-            <li class="link"><a href="index.html#about">About</a></li>
+            <li class="link"><a href="index.html#testimonials">About</a></li>
+            <li class="link"><a href="Pricing Plan.html">Pricing Plan</a></li>
             <li class="link"><a href="contact.html">Contact Us</a></li>
         </ul>
-        <button class="btn">Join Now</button>
+
+        <!-- Profile Button -->
+        <div class="profile-container">
+          <button class="profile-btn" id="profileBtn">
+            <i class="ri-user-line"></i>
+            <span>Profile</span>
+          </button>
+          
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profileDropdown">
+            <div class="profile-header">
+              <div class="profile-avatar">
+                <i class="ri-user-fill"></i>
+              </div>
+              <div class="profile-info">
+                <h4 id="userName">John Doe</h4>
+                <p id="userMembership">Premium Member</p>
+              </div>
+            </div>
+            
+            <div class="profile-details">
+              <div class="detail-item">
+                <span class="detail-label">Age:</span>
+                <span class="detail-value" id="userAge">25 years</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Weight:</span>
+                <span class="detail-value" id="userWeight">75 kg</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Height:</span>
+                <span class="detail-value" id="userHeight">175 cm</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">BMI:</span>
+                <span class="detail-value" id="userBMI">24.5</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Goal:</span>
+                <span class="detail-value" id="userGoal">Weight Loss</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Plan:</span>
+                <span class="detail-value" id="userPlan">Monthly Plan</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Join Date:</span>
+                <span class="detail-value" id="userJoinDate">15 Jan 2024</span>
+              </div>
+            </div>
+            
+            <div class="profile-actions">
+              <button class="profile-action-btn edit-profile">
+                <i class="ri-edit-line"></i>
+                Edit Profile
+              </button>
+              <button class="profile-action-btn view-stats">
+                <i class="ri-bar-chart-line"></i>
+                View Stats
+              </button>
+              <button class="profile-action-btn logout">
+                <i class="ri-logout-box-line"></i>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
     </nav>
 
     <div class="privacy__container section__container">

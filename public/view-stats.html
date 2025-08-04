@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Stats - BodyCraft Gym</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .stats-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #111317 0%, #1f2125 100%);
+            padding: 2rem 1rem;
+        }
+
+        .stats-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .stats-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-card {
+            background: rgba(31, 33, 37, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(71, 215, 95, 0.2);
+        }
+
+        .stats-card h3 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stats-card h3 i {
+            color: #47d75f;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 1rem;
+            background: #2a2d32;
+            border-radius: 12px;
+            border: 1px solid #35373b;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #47d75f;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #35373b;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #47d75f, #3ca34d);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .workout-list {
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .workout-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .workout-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: #2a2d32;
+            border-radius: 12px;
+            border: 1px solid #35373b;
+            transition: transform 0.2s ease;
+        }
+
+        .workout-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(71, 215, 95, 0.1);
+            border-color: #47d75f;
+        }
+
+        .workout-info h4 {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .workout-info p {
+            color: #d1d5db;
+            font-size: 0.9rem;
+        }
+
+        .workout-duration {
+            background: #47d75f;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(31, 33, 37, 0.9);
+            border: 1px solid rgba(71, 215, 95, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(71, 215, 95, 0.2);
+            border-color: #47d75f;
+        }
+
+        .back-btn i {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: rgba(31, 33, 37, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(71, 215, 95, 0.2);
+        }
+
+        .summary-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #47d75f, #3ca34d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .summary-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-label {
+            color: #d1d5db;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                padding: 1rem;
+            }
+
+            .stats-header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .stats-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #47d75f, #3ca34d);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .goal-progress {
+            margin-top: 1rem;
+        }
+
+        .goal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .goal-info {
+            flex: 1;
+        }
+
+        .goal-name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .goal-target {
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+
+        .goal-current {
+            font-weight: 600;
+            color: #47d75f;
+        }
+    </style>
+</head>
+<body>
+    <div class="stats-container">
+        <button class="back-btn" onclick="goBack()">
+            <i class="ri-arrow-left-line"></i>
+        </button>
+
+        <div class="stats-header">
+            <h1>Your Fitness Stats</h1>
+            <p>Track your progress and achievements</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="ri-fire-line"></i>
+                </div>
+                <div class="summary-value" id="totalWorkouts">24</div>
+                <div class="summary-label">Total Workouts</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="ri-time-line"></i>
+                </div>
+                <div class="summary-value" id="totalHours">48</div>
+                <div class="summary-label">Hours Trained</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="ri-heart-pulse-line"></i>
+                </div>
+                <div class="summary-value" id="avgHeartRate">142</div>
+                <div class="summary-label">Avg Heart Rate</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="ri-trophy-line"></i>
+                </div>
+                <div class="summary-value" id="streakDays">7</div>
+                <div class="summary-label">Day Streak</div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <!-- Body Metrics -->
+            <div class="stats-card">
+                <h3><i class="ri-body-scan-line"></i> Body Metrics</h3>
+                <div class="metric-grid">
+                    <div class="metric-item">
+                        <div class="metric-value" id="currentWeight">75</div>
+                        <div class="metric-label">Current Weight (kg)</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="currentBMI">24.5</div>
+                        <div class="metric-label">BMI</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="bodyFat">18</div>
+                        <div class="metric-label">Body Fat %</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="muscleMass">45</div>
+                        <div class="metric-label">Muscle Mass (kg)</div>
+                    </div>
+                </div>
+                <div class="goal-progress">
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <div class="goal-name">Weight Goal</div>
+                            <div class="goal-target">Target: 70kg</div>
+                        </div>
+                        <div class="goal-current">75kg</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workout Progress Chart -->
+            <div class="stats-card">
+                <h3><i class="ri-line-chart-line"></i> Weekly Progress</h3>
+                <div class="chart-container">
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Workouts -->
+            <div class="stats-card">
+                <h3><i class="ri-calendar-check-line"></i> Recent Workouts</h3>
+                <div class="workout-list" id="workoutList">
+                    <!-- Workout items will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="stats-card">
+                <h3><i class="ri-medal-line"></i> Achievements</h3>
+                <div id="achievementsList">
+                    <div class="achievement-badge">First Workout</div>
+                    <div class="achievement-badge">7-Day Streak</div>
+                    <div class="achievement-badge">Weight Loss Goal</div>
+                    <div class="achievement-badge">Strength Milestone</div>
+                    <div class="achievement-badge">Consistency Award</div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="stats-card">
+                <h3><i class="ri-speed-line"></i> Performance</h3>
+                <div class="metric-grid">
+                    <div class="metric-item">
+                        <div class="metric-value" id="maxBench">85</div>
+                        <div class="metric-label">Max Bench (kg)</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="maxSquat">120</div>
+                        <div class="metric-label">Max Squat (kg)</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="maxDeadlift">140</div>
+                        <div class="metric-label">Max Deadlift (kg)</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" id="maxPullup">12</div>
+                        <div class="metric-label">Max Pull-ups</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Overview Chart -->
+            <div class="stats-card">
+                <h3><i class="ri-bar-chart-line"></i> Monthly Overview</h3>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user data and initialize stats
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            initializeCharts();
+            loadWorkoutHistory();
+            updateStats();
+        });
+
+        function loadUserData() {
+            const userData = JSON.parse(localStorage.getItem('userData')) || {
+                firstName: 'John',
+                lastName: 'Doe',
+                weight: 75,
+                height: 175,
+                fitnessGoal: 'weight-loss'
+            };
+
+            // Update body metrics
+            document.getElementById('currentWeight').textContent = userData.weight;
+            const bmi = ((userData.weight / Math.pow(userData.height / 100, 2))).toFixed(1);
+            document.getElementById('currentBMI').textContent = bmi;
+        }
+
+        function initializeCharts() {
+            // Weekly Progress Chart
+            const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+            new Chart(weeklyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Calories Burned',
+                        data: [450, 520, 380, 600, 480, 550, 420],
+                        borderColor: '#47d75f',
+                        backgroundColor: 'rgba(71, 215, 95, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#d1d5db'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#d1d5db'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Monthly Overview Chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Workouts',
+                        data: [4, 5, 3, 6],
+                        backgroundColor: 'rgba(71, 215, 95, 0.8)',
+                        borderRadius: 8
+                    }, {
+                        label: 'Hours',
+                        data: [8, 10, 6, 12],
+                        backgroundColor: 'rgba(60, 163, 77, 0.8)',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#d1d5db'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#d1d5db'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#d1d5db'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadWorkoutHistory() {
+            const workoutList = document.getElementById('workoutList');
+            const workouts = [
+                { name: 'Upper Body Strength', date: 'Today', duration: '45 min' },
+                { name: 'Cardio HIIT', date: 'Yesterday', duration: '30 min' },
+                { name: 'Lower Body Power', date: '2 days ago', duration: '50 min' },
+                { name: 'Yoga & Stretching', date: '3 days ago', duration: '40 min' },
+                { name: 'Full Body Circuit', date: '4 days ago', duration: '55 min' },
+                { name: 'Core & Abs', date: '5 days ago', duration: '35 min' }
+            ];
+
+            workoutList.innerHTML = workouts.map(workout => `
+                <div class="workout-item">
+                    <div class="workout-info">
+                        <h4>${workout.name}</h4>
+                        <p>${workout.date}</p>
+                    </div>
+                    <div class="workout-duration">${workout.duration}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            // Simulate real-time stats updates
+            const stats = {
+                totalWorkouts: 24,
+                totalHours: 48,
+                avgHeartRate: 142,
+                streakDays: 7,
+                bodyFat: 18,
+                muscleMass: 45,
+                maxBench: 85,
+                maxSquat: 120,
+                maxDeadlift: 140,
+                maxPullup: 12
+            };
+
+            // Update summary values
+            Object.keys(stats).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = stats[key];
+                }
+            });
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Randomly update some stats for demo purposes
+            const randomWorkouts = Math.floor(Math.random() * 5) + 24;
+            const randomHours = Math.floor(Math.random() * 10) + 48;
+            
+            document.getElementById('totalWorkouts').textContent = randomWorkouts;
+            document.getElementById('totalHours').textContent = randomHours;
+        }, 10000); // Update every 10 seconds
+    </script>
+</body>
+</html> 
